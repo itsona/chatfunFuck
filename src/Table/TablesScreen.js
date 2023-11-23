@@ -68,7 +68,13 @@ const TablesScreen = ({route}) => {
             setUser(user || {})
             const table = await Axios.GET('/table?table_id=' + route.params.tableId)
             setTableDetails(table)
+            table.cardsList.forEach(item=> {
+                if('start' in item){
+                    setConversation(item)
+                }
+            })
             const ws = new WebSocket('ws://192.168.1.146:3000');
+            setSocket(ws)
             ws.onopen = ()=> {
                 setSocket(ws)
                 ws.send(JSON.stringify({type: 'join-table',tableId: table.tableId, user,}))
@@ -82,6 +88,7 @@ const TablesScreen = ({route}) => {
                     setConversation(null)
                     setCards(data.cards)
                 }if(data.type === 'start-conversation'){
+                    setTableDetails(data.table)
                     setConversation({start: data.card})
                 }if(data.type === 'open-table'){
                     setOpened(true)
@@ -128,8 +135,6 @@ const TablesScreen = ({route}) => {
             <View>
                 <Text>{tableDetails?.tableId}
 
-
-                    {JSON.stringify(tableDetails)}
                 </Text>
                 {tableDetails?.usersList?.map(player=> (
                     <View key={player._id} style={{flexDirection: 'row'}}>
@@ -138,7 +143,7 @@ const TablesScreen = ({route}) => {
                         {tableDetails.leadUser === player._id && (<Text> Is Lead </Text>)}
                     </View>))}
             </View>
-            {isLeader && (
+            {isLeader && !opened && !conversation && (
                 <TouchableOpacity onPress={startGame}>
                     <Text>Start Game</Text>
                 </TouchableOpacity>
@@ -168,7 +173,7 @@ const TablesScreen = ({route}) => {
                 </TouchableOpacity>
             ))}
 
-            {isLeader && (<TouchableOpacity onPress={openCards}>
+            {isLeader && conversation && (<TouchableOpacity onPress={openCards}>
                 <Text>Open Answers</Text>
 
             </TouchableOpacity>)}

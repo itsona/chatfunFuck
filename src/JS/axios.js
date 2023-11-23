@@ -29,7 +29,6 @@ export class Axios {
         if(user){
             params.user = user
         }
-        console.log(user)
         try {
             return axios.put(`${baseUrl}${url}`, params).then((response)=> response.data)
         }catch (e) {
