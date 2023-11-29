@@ -134,7 +134,6 @@ const TablesScreen = ({route}) => {
         <ScrollView style={{height: '100%', backgroundColor: 'rgba(180,170,190,0.05)'}}>
             <View>
                 <Text>{tableDetails?.tableId}
-
                 </Text>
                 {tableDetails?.usersList?.map(player=> (
                     <View key={player._id} style={{flexDirection: 'row'}}>
@@ -173,9 +172,8 @@ const TablesScreen = ({route}) => {
                 </TouchableOpacity>
             ))}
 
-            {isLeader && conversation && (<TouchableOpacity onPress={openCards}>
+            {isLeader && !opened && conversation && (<TouchableOpacity onPress={openCards}>
                 <Text>Open Answers</Text>
-
             </TouchableOpacity>)}
 
             {opened && tableDetails.cardsList.map((card, index)=> (card.card && (<>

@@ -100,7 +100,9 @@ const MainScreen = () => {
                     <TextInput mode={'outlined'} label={'name'} onChangeText={onRegister} value={user}></TextInput>
                     <Text style={styles.joinTitle}>Join Table</Text>
                     <TextInput mode={'outlined'} label={'Table ID'} keyboardType={'numeric'} onChangeText={setTableId}
-                               value={tableId}></TextInput>
+                               value={tableId}
+                               onSubmitEditing={() => joinTable(tableId)}
+                    ></TextInput>
                     <View style={styles.right}>
                         <Button onPress={() => joinTable(tableId)}>Join</Button>
                     </View>
