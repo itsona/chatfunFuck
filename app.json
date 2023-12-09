@@ -7,6 +7,17 @@
       "ios",
       "android",
       "web"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3dc497e9-72c5-47a2-9d42-240845f8d3f1"
+      }
+    },
+    "android": {
+      "package": "chatopia.app"
+    },
+    "ios": {
+      "bundleIdentifier": "chatopia.app"
+    }
   }
 }

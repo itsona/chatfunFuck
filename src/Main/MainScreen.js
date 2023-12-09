@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, FlatList, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, FlatList, Text, TouchableWithoutFeedback, StyleSheet, ScrollView, Keyboard} from 'react-native';
 import {Card, TextInput, Button} from "react-native-paper";
 import {Axios} from "../JS/axios";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
@@ -94,21 +94,22 @@ const MainScreen = () => {
     const updateDebounce = debounce(onUserUpdate, 1000)
 
     return (
-        <View style={styles.mainView}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.mainView}>
             <Card style={[styles.mainCard]}>
                 <Card.Content>
-                    <TextInput mode={'outlined'} label={'name'} onChangeText={onRegister} value={user}></TextInput>
+                    <TextInput mode={'outlined'} label={'სახელი'} onChangeText={onRegister} value={user}></TextInput>
                     <Text style={styles.joinTitle}>Join Table</Text>
-                    <TextInput mode={'outlined'} label={'Table ID'} keyboardType={'numeric'} onChangeText={setTableId}
+                    <TextInput mode={'outlined'} label={'მაგიდის ნომერი'} keyboardType={'numeric'} onChangeText={setTableId}
                                value={tableId}
                                onSubmitEditing={() => joinTable(tableId)}
                     ></TextInput>
                     <View style={styles.right}>
-                        <Button onPress={() => joinTable(tableId)}>Join</Button>
+                        <Button  onPress={() => joinTable(tableId)}>შეუერთდი</Button>
                     </View>
                 </Card.Content>
                 <Card.Actions>
-                    <Button onPress={createTable}>Create</Button>
+                    <Button onPress={createTable}>შექმნა</Button>
                 </Card.Actions>
             </Card>
             {/*<FlatList*/}
@@ -121,7 +122,8 @@ const MainScreen = () => {
             {/*/>*/}
 
             <Button title={'Reload'} onPress={getTables}></Button>
-        </View>
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 

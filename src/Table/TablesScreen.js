@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {View, Button, FlatList, Text, TouchableOpacity, TextInput, ScrollView} from 'react-native';
+import {View, FlatList, Text, TouchableOpacity, TextInput, ScrollView} from 'react-native';
 import {Axios} from "../JS/axios";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
 import navigationService from "../JS/navigation.service";
+import {ProgressBar, Icon, MD3Colors, Button} from 'react-native-paper';
 
 const TablesScreen = ({route}) => {
     //TODO ელოდება მინიმალური რაოდენობის შევსებას. ვკითხოთ დავიწყოთ თუ არა.
@@ -93,6 +94,8 @@ const TablesScreen = ({route}) => {
                 }if(data.type === 'open-table'){
                     setOpened(true)
                     setTableDetails(data.table)
+                }if(data.type === 'updated-answers'){
+                    setTableDetails(data.table)
                 }if(data.type === 'choose-leader'){
                     setOpened(false)
                     setTableDetails(data.table)
@@ -131,31 +134,40 @@ const TablesScreen = ({route}) => {
 
 
     return (
-        <ScrollView style={{height: '100%', backgroundColor: 'rgba(180,170,190,0.05)'}}>
+        <View style={{height: '100%', backgroundColor: 'rgba(180,170,190,0.05)'}}>
             <View>
                 <Text>{tableDetails?.tableId}
                 </Text>
-                {tableDetails?.usersList?.map(player=> (
-                    <View key={player._id} style={{flexDirection: 'row'}}>
-                        <Text>{player.name}</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                        <Text style={{paddingRight: 8}}>{tableDetails.usersList?.length} / 16</Text>
+                            <Icon
+                            source="account-outline"
+                            color={MD3Colors.neutral60}
+                            size={20}
+                        />
 
-                        {tableDetails.leadUser === player._id && (<Text> Is Lead </Text>)}
-                    </View>))}
+                        <Text style={{paddingLeft: 24, paddingRight: 8}}>{tableDetails?.usersList?.find(user=> user._id === tableDetails.leadUser)?.name}</Text>
+
+                        <Icon
+                            source="shield-crown-outline"
+                            color={MD3Colors.error50}
+                            size={20}
+                        />
+                    </View>
             </View>
-            {isLeader && !opened && !conversation && (
-                <TouchableOpacity onPress={startGame}>
-                    <Text>Start Game</Text>
-                </TouchableOpacity>
-            )}
 
             {conversation && (<>
+                <View style={styles.count}>
+                    <Text>{tableDetails.cardsList?.length || 0} / {tableDetails.usersList?.length}</Text>
+                </View>
+                <ProgressBar progress={tableDetails.cardsList?.length || 0 / tableDetails.usersList?.length} color={'#6750A4'} />
                 <View style={styles.chatSender}>
                     <Text style={{fontSize: 16}}>
                         {conversation.start}
                     </Text>
                 </View>
-                {!isLeader && cards.length > 1 && cards.map((card)=> (
-                    <TouchableOpacity style={styles.chatReceiver} key={card} onPress={()=> chooseCards(card)}>
+                {!isLeader && cards.length > 1 && cards.map((card, index)=> (
+                    <TouchableOpacity style={styles.chatReceiver} key={index} onPress={()=> chooseCards(card)}>
                         <Text style={{color: 'white', fontSize: 16}}>{card}</Text>
                     </TouchableOpacity>
 
@@ -172,17 +184,30 @@ const TablesScreen = ({route}) => {
                 </TouchableOpacity>
             ))}
 
-            {isLeader && !opened && conversation && (<TouchableOpacity onPress={openCards}>
-                <Text>Open Answers</Text>
-            </TouchableOpacity>)}
+            {isLeader && !opened && conversation && (
+                <View style={{alignItems: 'center', paddingTop: 12}}>
+                <Button mode="contained" onPress={openCards}>
+                <Text>კარტების გახსნა</Text>
+            </Button>
+                </View>)}
 
-            {opened && tableDetails.cardsList.map((card, index)=> (card.card && (<>
-                <TouchableOpacity style={styles.chatReceiver} key={card.userId} onPress={()=> chooseLeader(card.userId)}>
-                    <Text style={{color: 'white', fontSize: 16}}>{card.userName}: {card.card}</Text>
+            {isLeader && !opened && !conversation && (
+                <View style={{alignItems: 'center', paddingTop: 12}}>
+                <Button mode="contained" onPress={startGame}>
+                <Text>დაწყება</Text>
+                </Button>
+                </View>
+            )}
+            {opened && tableDetails.cardsList.map((card, index)=> (card.card && (
+                <View key={index}>
+                    <Text style={{marginTop: 24, marginLeft: 84}}>{card.userName}</Text>
+                    <TouchableOpacity style={styles.chatReceiver} key={card.userId} onPress={()=> chooseLeader(card.userId)}>
+                    <Text style={{color: 'white', fontSize: 16}}>{card.card}</Text>
                 </TouchableOpacity>
-            </>)))}
+                </View>
+            )))}
 
-        </ScrollView>
+        </View>
     );
 };
 
@@ -199,7 +224,7 @@ const styles ={
     },
     chatReceiver:{
         padding: 24,
-        marginTop: 24,
+        marginTop: 4,
         marginLeft:80,
         marginRight: 24,
         textColor: 'rgb(255,255,255)',
@@ -208,6 +233,11 @@ const styles ={
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
         borderBottomLeftRadius: 24,
+    },
+    count: {
+        paddingHorizontal: 12,
+        alignItems: 'flex-end',
+        textAlign: 'right',
     }
 }
 export default TablesScreen;
