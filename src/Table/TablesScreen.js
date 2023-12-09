@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, FlatList, Text, TouchableOpacity, TextInput, ScrollView} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, TextInput} from 'react-native';
 import {Axios} from "../JS/axios";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
 import navigationService from "../JS/navigation.service";
@@ -134,7 +134,7 @@ const TablesScreen = ({route}) => {
 
 
     return (
-        <View style={{height: '100%', backgroundColor: 'rgba(180,170,190,0.05)'}}>
+        <ScrollView style={{height: '100%', backgroundColor: 'rgba(180,170,190,0.05)'}}>
             <View>
                 <Text>{tableDetails?.tableId}
                 </Text>
@@ -166,13 +166,13 @@ const TablesScreen = ({route}) => {
                         {conversation.start}
                     </Text>
                 </View>
-                {!isLeader && cards.length > 1 && cards.map((card, index)=> (
+                {!isLeader && cards?.length > 1 && cards?.map((card, index)=> (
                     <TouchableOpacity style={styles.chatReceiver} key={index} onPress={()=> chooseCards(card)}>
                         <Text style={{color: 'white', fontSize: 16}}>{card}</Text>
                     </TouchableOpacity>
 
                 ))}
-                {!opened && !isLeader && cards.length === 1 && (<>
+                {!opened && !isLeader && cards?.length === 1 && (<>
                     <View style={styles.chatReceiver} key={cards[0]}>
                         <Text style={{color: 'white', fontSize: 22}}>{cards[0]}</Text>
                     </View>
@@ -207,7 +207,7 @@ const TablesScreen = ({route}) => {
                 </View>
             )))}
 
-        </View>
+        </ScrollView>
     );
 };
 

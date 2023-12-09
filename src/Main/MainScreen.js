@@ -126,7 +126,8 @@ const MainScreen = () => {
         </TouchableWithoutFeedback>
     );
 };
-
+// nina chawera da ni darcha
+// raime
 export default MainScreen;
 const styles = StyleSheet.create({
     mainView: {
