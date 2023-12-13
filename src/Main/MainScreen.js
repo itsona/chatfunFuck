@@ -20,7 +20,7 @@ const MainScreen = () => {
     // შექმნა: რენდომ რიცხვი ამოუგდო პაროლად და დაჯოინდა ავტომატურად.
 
     const connectAgain = () => {
-        const ws = new WebSocket('ws://192.168.1.146:3000'); // Replace with your server IP
+        const ws = new WebSocket('ws://188.40.156.182:3000'); // Replace with your server IP
         ws.onmessage = (event) => {
             if (event.data) {
                 const newData = JSON.parse(event.data)
@@ -98,8 +98,7 @@ const MainScreen = () => {
             <View style={styles.mainView}>
             <Card style={[styles.mainCard]}>
                 <Card.Content>
-                    <TextInput mode={'outlined'} label={'სახელი'} onChangeText={onRegister} value={user}></TextInput>
-                    <Text style={styles.joinTitle}>Join Table</Text>
+                    <TextInput mode={'outlined'} label={'სახელი'} onChangeText={onRegister} value={user} style={{marginBottom: 12}}></TextInput>
                     <TextInput mode={'outlined'} label={'მაგიდის ნომერი'} keyboardType={'numeric'} onChangeText={setTableId}
                                value={tableId}
                                onSubmitEditing={() => joinTable(tableId)}
