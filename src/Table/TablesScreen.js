@@ -42,7 +42,7 @@ const TablesScreen = ({route}) => {
         setIsLeader(tableDetails.leadUser === user._id)
     }, [tableDetails])
     const connectAgain=()=> {
-        const ws = new WebSocket('ws://188.40.156.182:3000'); // Replace with your server IP
+        const ws = new WebSocket('ws://192.168.1.147:3000'); // Replace with your server IP
         ws.onmessage = (event) => {
             if (event.data) {
                 const newData = JSON.parse(event.data)
@@ -74,11 +74,11 @@ const TablesScreen = ({route}) => {
                     setConversation(item)
                 }
             })
-            const ws = new WebSocket('ws://188.40.156.182:3000');
+            const ws = new WebSocket('ws://192.168.1.147:3000');
             setSocket(ws)
             ws.onopen = ()=> {
                 setSocket(ws)
-                ws.send(JSON.stringify({type: 'join-table',tableId: table.tableId, user,}))
+                ws?.send(JSON.stringify({type: 'join-table',tableId: table.tableId, user,}))
             }
             ws.onmessage = (event)=> {
                 const data = JSON.parse(event.data)
@@ -110,18 +110,18 @@ const TablesScreen = ({route}) => {
 
 
     const openCards = ()=> {
-        socket.send(JSON.stringify({type: 'open-cards', tableId: tableDetails.tableId}))
+        socket?.send(JSON.stringify({type: 'open-cards', tableId: tableDetails.tableId}))
     }
 
     const chooseCards = (card)=> {
         const type = isLeader ? 'start-conversation' : 'set-answer'
-        socket.send(JSON.stringify({type, tableId: tableDetails.tableId, card,user}))
+        socket?.send(JSON.stringify({type, tableId: tableDetails.tableId, card,user}))
         setCards([card])
     }
 
     const startGame= ()=> {
         setConversation(null)
-        socket.send(JSON.stringify({type: 'start-game',tableId: tableDetails.tableId, userId: user._id}))
+        socket?.send(JSON.stringify({type: 'start-game',tableId: tableDetails.tableId, userId: user._id}))
     }
     useEffect(() => {
         // connectAgain()
@@ -129,7 +129,7 @@ const TablesScreen = ({route}) => {
     }, []);
 
     const chooseLeader = (userId)=> {
-        socket.send(JSON.stringify({type: 'choose-leader',tableId: tableDetails.tableId, userId}));
+        socket?.send(JSON.stringify({type: 'choose-leader',tableId: tableDetails.tableId, userId}));
     }
 
 

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, FlatList, Text, TouchableWithoutFeedback, StyleSheet, ScrollView, Keyboard} from 'react-native';
+import {View, FlatList, Text, TouchableWithoutFeedback, StyleSheet, ScrollView, Keyboard, Platform} from 'react-native';
 import {Card, TextInput, Button} from "react-native-paper";
 import {Axios} from "../JS/axios";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
@@ -20,7 +20,7 @@ const MainScreen = () => {
     // შექმნა: რენდომ რიცხვი ამოუგდო პაროლად და დაჯოინდა ავტომატურად.
 
     const connectAgain = () => {
-        const ws = new WebSocket('ws://188.40.156.182:3000'); // Replace with your server IP
+        const ws = new WebSocket('ws://192.168.1.147:3000'); // Replace with your server IP
         ws.onmessage = (event) => {
             if (event.data) {
                 const newData = JSON.parse(event.data)
@@ -73,7 +73,6 @@ const MainScreen = () => {
         }
     }
 
-
     const onRegister = async (name) => {
         setUser(name)
         updateDebounce(name)
@@ -94,11 +93,15 @@ const MainScreen = () => {
     const updateDebounce = debounce(onUserUpdate, 1000)
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <TouchableWithoutFeedback onPress={Platform.OS !== 'web' ?Keyboard.dismiss : ()=>{}} accessible={false}>
             <View style={styles.mainView}>
             <Card style={[styles.mainCard]}>
                 <Card.Content>
-                    <TextInput mode={'outlined'} label={'სახელი'} onChangeText={onRegister} value={user} style={{marginBottom: 12}}></TextInput>
+                    <TextInput mode={'outlined'}
+                               label={'სახელი'}
+                               onChangeText={onRegister}
+                               value={user}
+                               style={{marginBottom: 12}}></TextInput>
                     <TextInput mode={'outlined'} label={'მაგიდის ნომერი'} keyboardType={'numeric'} onChangeText={setTableId}
                                value={tableId}
                                onSubmitEditing={() => joinTable(tableId)}

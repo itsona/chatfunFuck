@@ -2,7 +2,7 @@
   "expo": {
     "name": "Chatopia",
     "slug": "blank",
-    "version": "1.0.1",
+    "version": "1.0.8",
     "platforms": [
       "ios",
       "android",
@@ -14,10 +14,13 @@
       }
     },
     "android": {
-      "package": "chatopia.app"
+      "package": "chatopia.app",
+      "versionCode": 8,
+      "permissions": [ "INTERNET", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE" ]
     },
     "ios": {
-      "bundleIdentifier": "chatopia.app"
+      "bundleIdentifier": "chatopia.app",
+      "buildNumber": "2"
     }
   }
 }

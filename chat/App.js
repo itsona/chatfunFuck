@@ -8,7 +8,7 @@ const App = () => {
     const [socket, setSocket] = useState(null);
 
     const connectAgain=()=> {
-        const ws = new WebSocket('ws://188.40.156.182:3000'); // Replace with your server IP
+        const ws = new WebSocket('ws://192.168.1.147:3000'); // Replace with your server IP
         ws.onmessage = (event) => {
             if(event.data) {
                 const newMessage = JSON.parse(event.data)
