@@ -136,8 +136,13 @@ const TablesScreen = ({route}) => {
     return (
         <ScrollView style={{height: '100%', backgroundColor: 'rgba(180,170,190,0.05)'}}>
             <View>
-                <Text>{tableDetails?.tableId}
+                <View style={{alignItems: 'start', justifyContent: 'start'}}>
+                    <Button  onPress={() => navigationService.navigate('Main', )}>გასვლა</Button>
+                </View>
+                <View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'center', padding: 12}}>
+                <Text style={{fontSize: 24}}>{tableDetails?.tableId}
                 </Text>
+                </View>
                     <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                         <Text style={{paddingRight: 8}}>{tableDetails.usersList?.length} / 16</Text>
                             <Icon
@@ -160,7 +165,10 @@ const TablesScreen = ({route}) => {
                 <View style={styles.count}>
                     <Text>{tableDetails.cardsList?.length || 0} / {tableDetails.usersList?.length}</Text>
                 </View>
-                <ProgressBar progress={tableDetails.cardsList?.length || 0 / tableDetails.usersList?.length} color={'#6750A4'} />
+                <View>
+                <ProgressBar
+                    progress={tableDetails.cardsList?.length || 0 / tableDetails.usersList?.length} color={'#6750A4'} />
+                </View>
                 <View style={styles.chatSender}>
                     <Text style={{fontSize: 16}}>
                         {conversation.start}

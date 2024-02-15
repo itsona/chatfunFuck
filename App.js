@@ -11,7 +11,7 @@ const App = () => {
     return <NavigationContainer ref={_navigator}>
         <Stack.Navigator
             screenOptions={{
-                headerShown: true,
+                headerShown: false,
             }}>
             <Stack.Screen name="Main" component={MainScreen} />
             <Stack.Screen name="TablesScreen" component={TablesScreen} />

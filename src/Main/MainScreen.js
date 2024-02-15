@@ -66,7 +66,6 @@ const MainScreen = () => {
                     tableId: id,
                 }
             )
-            console.log(table)
             navigationService.navigate('TablesScreen', {tableId: table.tableId})
         } catch (e) {
             console.log(e)
