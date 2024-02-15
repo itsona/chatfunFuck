@@ -20,7 +20,7 @@ const MainScreen = () => {
     // შექმნა: რენდომ რიცხვი ამოუგდო პაროლად და დაჯოინდა ავტომატურად.
 
     const connectAgain = () => {
-        const ws = new WebSocket('ws://192.168.1.147:3000'); // Replace with your server IP
+        const ws = new WebSocket('wss://chatopia.ge/ws'); // Replace with your server IP
         ws.onmessage = (event) => {
             if (event.data) {
                 const newData = JSON.parse(event.data)

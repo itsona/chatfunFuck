@@ -1,6 +1,6 @@
 import axios from 'axios';
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
-const baseUrl = 'http://localhost:5000';
+const baseUrl = 'https://chatopia.ge/api';
 
 // Passing configuration object to axios
 export class Axios {

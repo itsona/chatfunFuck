@@ -42,7 +42,7 @@ const TablesScreen = ({route}) => {
         setIsLeader(tableDetails.leadUser === user._id)
     }, [tableDetails])
     const connectAgain=()=> {
-        const ws = new WebSocket('ws://192.168.1.147:3000'); // Replace with your server IP
+        const ws = new WebSocket('wss://chatopia.ge/ws'); // Replace with your server IP
         ws.onmessage = (event) => {
             if (event.data) {
                 const newData = JSON.parse(event.data)
@@ -74,7 +74,7 @@ const TablesScreen = ({route}) => {
                     setConversation(item)
                 }
             })
-            const ws = new WebSocket('ws://192.168.1.147:3000');
+            const ws = new WebSocket('wss://chatopia.ge/ws');
             setSocket(ws)
             ws.onopen = ()=> {
                 setSocket(ws)
