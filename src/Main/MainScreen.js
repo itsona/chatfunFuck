@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, FlatList, Text, TouchableWithoutFeedback, StyleSheet, ScrollView, Keyboard, Platform} from 'react-native';
+import {View, TouchableWithoutFeedback, StyleSheet, Keyboard, Platform} from 'react-native';
 import {Card, TextInput, Button} from "react-native-paper";
 import {Axios} from "../JS/axios";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
@@ -7,8 +7,6 @@ import navigationService from "../JS/navigation.service";
 import {debounce} from "../JS/variables";
 
 const MainScreen = () => {
-    const [tables, setTables] = useState([]);
-    const [socket, setSocket] = useState(null)
     const [user, setUser] = useState('')
     const [tableId, setTableId] = useState('')
     //TODO ავარჩევინოთ რამდენი კაცი ითამაშებს /მინ /მაქს. სახელი. ღიაა თუ დახურული, და პაროლი
@@ -18,39 +16,18 @@ const MainScreen = () => {
     // აგდებს ორ ვერსიას.
     // დაჯოინება და უთითებს პაროლს
     // შექმნა: რენდომ რიცხვი ამოუგდო პაროლად და დაჯოინდა ავტომატურად.
-
-    const connectAgain = () => {
-        const ws = new WebSocket('wss://chatopia.ge/ws'); // Replace with your server IP
-        ws.onmessage = (event) => {
-            if (event.data) {
-                const newData = JSON.parse(event.data)
-                //         setTables(newData);
-                //         if(newData.status === 'created') {
-                //             ws.send(JSON.stringify({
-                //                 isJoin: true,
-                //                 tableId: newData.tableId,
-                //             }))
-                //         }
-                if (newData.message === 'updated-tables') {
-                    setTables(newData.data)
-                }
-                //
-            }
-        }
-        // };
-        setSocket(ws)
-    }
-    const getTables = () => {
-        Axios.GET('/tables').then(setTables).catch(console.warn)
-        connectAgain()
-    }
     const loadData = async () => {
-        getTables();
         const user = JSON.parse(await asyncStorage.getItem('user_info')) || null
+        if(!user) {
+            Axios.POST('/register', {name}).then((user) => {
+                asyncStorage.setItem('user_info', JSON.stringify(user))
+                setUser(user?.name || '')
+            })
+            return
+        }
         setUser(user?.name || '')
     }
     useEffect(() => {
-        // connectAgain()
         loadData()
     }, []);
 
@@ -77,16 +54,9 @@ const MainScreen = () => {
         updateDebounce(name)
     }
     const onUserUpdate = async (name) => {
-        const user = JSON.parse(await asyncStorage.getItem('user_info'))
-        if (user) {
-            Axios.PUT('/modify-user', {name}).then((user) => {
-                asyncStorage.setItem('user_info', JSON.stringify(user))
-            }).catch(console.warn)
-            return
-        }
-        Axios.POST('/register', {name}).then((user) => {
+        Axios.PUT('/modify-user', {name}).then((user) => {
             asyncStorage.setItem('user_info', JSON.stringify(user))
-        })
+        }).catch(console.warn)
     }
 
     const updateDebounce = debounce(onUserUpdate, 1000)
@@ -113,22 +83,10 @@ const MainScreen = () => {
                     <Button onPress={createTable}>შექმნა</Button>
                 </Card.Actions>
             </Card>
-            {/*<FlatList*/}
-            {/*    data={tables}*/}
-            {/*    keyExtractor={(item) => item.tableId}*/}
-            {/*    renderItem={({ item }) => <TouchableOpacity onPress={()=> joinTable(item.tableId)}>*/}
-            {/*        <Text>{item.usersList?.map(item=> item.name)} {item.tableId}</Text>*/}
-            {/*    </TouchableOpacity>*/}
-            {/*    }*/}
-            {/*/>*/}
-
-            <Button title={'Reload'} onPress={getTables}></Button>
             </View>
         </TouchableWithoutFeedback>
     );
 };
-// nina chawera da ni darcha
-// raime
 export default MainScreen;
 const styles = StyleSheet.create({
     mainView: {
