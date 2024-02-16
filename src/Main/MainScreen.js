@@ -1,21 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View, TouchableWithoutFeedback, StyleSheet, Keyboard, Platform} from 'react-native';
 import {Card, TextInput, Button} from "react-native-paper";
 import {Axios} from "../JS/axios";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
 import navigationService from "../JS/navigation.service";
-import {debounce} from "../JS/variables";
+import _ from 'lodash';
 
 const MainScreen = () => {
     const [user, setUser] = useState('')
     const [tableId, setTableId] = useState('')
-    //TODO ავარჩევინოთ რამდენი კაცი ითამაშებს /მინ /მაქს. სახელი. ღიაა თუ დახურული, და პაროლი
-
-
-    //TODO შემოვიდა, ჩაწერა სახელი.
-    // აგდებს ორ ვერსიას.
-    // დაჯოინება და უთითებს პაროლს
-    // შექმნა: რენდომ რიცხვი ამოუგდო პაროლად და დაჯოინდა ავტომატურად.
     const loadData = async () => {
         const user = JSON.parse(await asyncStorage.getItem('user_info')) || null
         if(!user) {
@@ -51,15 +44,14 @@ const MainScreen = () => {
 
     const onRegister = async (name) => {
         setUser(name)
-        updateDebounce(name)
+            updateDebounce.current(name)
     }
-    const onUserUpdate = async (name) => {
+    const onUserUpdate = (name) => {
         Axios.PUT('/modify-user', {name}).then((user) => {
             asyncStorage.setItem('user_info', JSON.stringify(user))
         }).catch(console.warn)
     }
-
-    const updateDebounce = debounce(onUserUpdate, 1000)
+    const updateDebounce = useRef(_.debounce(onUserUpdate, 1000));
 
     return (
         <TouchableWithoutFeedback onPress={Platform.OS !== 'web' ?Keyboard.dismiss : ()=>{}} accessible={false}>
